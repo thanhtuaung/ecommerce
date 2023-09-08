@@ -33,7 +33,13 @@
                     <div style="flex: 2;"><img class="row-image" src="{% static 'images/placeholder.png' %}" alt="product img"></div>
                     <div style="flex: 2;"><strong>Item</strong></div>
                     <div style="flex: 1;"><strong>$200</strong></div>
-                    <div style="flex: 1;"><strong>2</strong></div>
+                    <div style="flex: 1;">
+                        <p class="quantity">2</p>
+                        <div class="quantity">
+                            <img class="chg-quantity" src="{% static 'images/arrow_up.png' %}" alt="up_arrow">
+                            <img class="chg-quantity" src="{% static 'images/arrow_down.png' %}" alt="down_arrow">
+                        </div>
+                    </div>
                     <div style="flex: 1;"><strong>$400</strong></div>
                 </div>
             </div>

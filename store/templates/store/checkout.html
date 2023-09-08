@@ -1,1 +1,73 @@
-<h3>Checkout</h3>
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-lg-6">
+        <div class="box-element">
+
+            <a class="btn btn-outline-dark" href="{% url 'cart' %}">Back to Cart</a>
+            <hr>
+            <h4>Order Summary</h4>
+
+            <div class="cart-row">
+                <div style="flex: 2;"><img class="row-image" src="{% static 'images/placeholder.png' %}"
+                        alt="product img"></div>
+                <div style="flex: 2;">Item</div>
+                <div style="flex: 1;">$200</div>
+                <div style="flex: 1;">x2
+                </div>
+            </div>
+            <h5>Items: 2</h5>
+            <h5>Total: $400</h5>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper">
+            <form id="form">
+                <div id="user-info">
+                    <div class="form-field">
+                        <input required type="text" class="form-control" name="name" placeholder="Name...">
+                    </div>
+                    <div class="form-field">
+                        <input required type="email" class="form-control" name="email" placeholder="Email...">
+                    </div>
+
+                </div>
+                <div class="shipping-info">
+                    <hr>
+                    <p>Shipping information</p>
+                    <hr>
+                    <div class="form-field">
+                        <input required type="text" class="form-control" name="address" placeholder="Address...">
+                    </div>
+                    <div class="form-field">
+                        <input required type="text" class="form-control" name="city" placeholder="City...">
+                    </div>
+                    <div class="form-field">
+                        <input required type="text" class="form-control" name="state" placeholder="State...">
+                    </div>
+                    <div class="form-field">
+                        <input required type="text" class="form-control" name="zipcode" placeholder="Zipcode...">
+                    </div>
+                </div>
+                <hr>
+                <input class="btn btn-success btn-block" type="submit" value="Continue">
+            </form>
+        </div>
+        <br>
+        <div class="box-element hidden" id="form-wrapper">
+            <p>Payment Options</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
