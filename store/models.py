@@ -11,7 +11,7 @@ class Customer(models.Model):
     
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    price = models.FloatField()
+    price = models.DecimalField(max_digits=7, decimal_places=2)
     digital = models.BooleanField(default=False, null=True)
     image = models.ImageField(null=True, blank=True)
 
@@ -29,8 +29,8 @@ class Product(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(Customer, blank=True, null=True, on_delete=models.SET_NULL)
     date_ordered = models.DateTimeField(auto_now_add=True)
-    complete = models.BooleanField(default=False)
     transition = models.CharField(max_length=200, null=True, blank=True)
+    complete = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return str(self.id)
@@ -69,3 +69,14 @@ class OrderItem(models.Model):
     @property
     def get_total(self):
         return self.product.price * self.quantity
+    
+class ShippingAddress(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+    address = models.CharField(max_length=200, null=True, blank=True)
+    city = models.CharField(max_length=200, null=True, blank=True)
+    state = models.CharField(max_length=200, null=True, blank=True)
+    zipcode = models.CharField(max_length=200, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return self.address

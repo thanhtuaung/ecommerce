@@ -4,17 +4,44 @@ for(i=0; i < updateBtns.length; i++) {
     updateBtns[i].addEventListener('click', function () {
         var productId = this.dataset.product
         var action = this.dataset.action
-
+        
         console.log('productId:', productId, 'Action:', action)
-		console.log('USER:', user)
+		console.log(user)
+
 
 		if (user == 'AnonymousUser'){
-			// addCookieItem(productId, action)
-		}else{
+			addCookieItem(productId, action)
+		} else {
 			updateUserOrder(productId, action)
 		}
 
     })
+}
+
+function addCookieItem(productId, action) {
+
+    if(action == 'add') {
+        if(cart[productId] == undefined) {
+            cart[productId] = {'quantity': 1}
+        } else {
+            cart[productId]['quantity'] += 1
+            console.log('Hello')
+        }
+    } else if (action == 'remove') {
+        cart[productId]['quantity'] -= 1
+        
+    }
+
+    console.log('Cart:', cart)
+    
+    if(cart[productId]['quantity'] <= 0) {
+        delete cart[productId]
+    }
+
+    delete document.cookie['cart']
+
+    document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;part=/;"
+    location.reload()
 }
 
 
