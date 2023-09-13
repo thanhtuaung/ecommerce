@@ -10,8 +10,8 @@
         <div class="box-element product">
             <h6><strong>{{product.name}}</strong></h6>
             <hr>
-            <div data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary update-cart">Add to Cart</div>
-            <div class="btn btn-outline-success">View</div>
+            <div data-product="{{product.id}}" data-qty="{{items_count}}" data-action="add" class="btn btn-outline-secondary update-cart">Add to Cart</div>
+            <a class="btn btn-outline-success" href="{% url 'product_detail' product.id %}">View</a>
             <h4 style="display: block; float: right;">${{product.price|floatformat:2}}</h4>
         </div>
     </div>

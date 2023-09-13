@@ -139,8 +139,11 @@
             return response.json()
         })
         .then((data) =>{
-            console.log('Order completed')
             alert('Transition complete')
+
+            cart = {}
+            document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/"
+
             window.location.href = "{% url 'store' %}"
         })
 

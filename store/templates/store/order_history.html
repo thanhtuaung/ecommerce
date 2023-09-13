@@ -1,0 +1,106 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+
+<br>
+<div class="row">
+    <div class="col-md-7">
+        <div class="box-element">
+            <table class="table">
+                <tr>
+                    <th>Date</th>
+                    <th>Transition ID</th>
+                    <th>Items</th>
+                    <th style="text-align: right;">Total</th>
+                </tr>
+                {% for order in orders %}
+                <tr data-order="{{order.id}}" data-transition="{{order.transition}}" data-date="{{order.date_ordered}}" style="cursor: pointer;" class="view-button">       
+                        <td>{{order.date_ordered}}</td>
+                        <td>{{order.transition}}</td>
+                        <td>{{order.items_count}}</td>
+                        <td style="text-align: right;">{{order.get_total}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <br>
+    </div>
+    <div class="col-md-5">
+        <div class="box-element">
+            <span style="font-weight: bold;">Transition ID :      <span id="transition-id" >.....</span></span><br>
+            <span >Date Ordered :     <span id="date-ordered">.....</span></span><br><br>
+            <table class="table" id="detail-table">
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var viewButtons = document.getElementsByClassName('view-button')
+
+    for(i = 0; i < viewButtons.length; i++) {
+    viewButtons[i].addEventListener('click', function(e) {
+        
+        var orderId = this.dataset.order
+        var transitionId = this.dataset.transition
+        var dataOrdered = this.dataset.date
+
+        document.getElementById('transition-id').innerHTML = transitionId
+        document.getElementById('date-ordered').innerHTML = dataOrdered
+
+        
+        console.log('Hello World', orderId)
+        var url = '/customer/orders/'+ orderId + '/'
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            var json_data = JSON.stringify(data)
+            var obj = JSON.parse(json_data)
+            var items = obj.items
+
+            console.log(items)
+
+            var table = document.getElementById('detail-table').innerHTML = `
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>`
+
+            for (i=0; i < items.length; i++) {
+
+                var item = items[i]
+
+                console.log(item)
+
+                var row = `<tr class="detail-item">
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${item.price}</td>
+                            </tr>`
+
+                $('#detail-table').append(row)
+            }
+
+        })
+
+    })
+}
+
+</script>
+
+{% endblock %}

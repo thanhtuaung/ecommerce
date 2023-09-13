@@ -1,0 +1,28 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+<br>
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="box-element">
+            <a class="btn btn-outline-dark" href="{% url 'store' %}">&#x2190; Back</a>
+            <br><br>
+            <img src="{{product.image.url}}" alt="product_image" width="100%">
+            <br><br>
+            <h4>{{product.name}}</h4>
+            <h6>Price : ${{product.price}}</h6>
+            <br>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque tempore porro autem corrupti
+                consectetur et numquam in nobis repellendus voluptas.</p>
+            <br>
+            <div data-product="{{product.id}}" data-qty="{{items_count}}" data-action="add"
+                class="btn btn-outline-secondary update-cart">Add to Cart</div>
+        </div>
+    </div>
+    <div class="col-md-6">
+    </div>
+</div>
+
+{% endblock %}

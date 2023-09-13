@@ -2,72 +2,31 @@ from django.shortcuts import render
 from .models import Product, Order, OrderItem, ShippingAddress
 
 from django.http import JsonResponse
+from .utils import cartData, guestOrder
 import json
 import datetime
 
 def store(request):
     products = Product.objects.all()
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items_count = order.items_count
-    else:
-        items_count = 0
+    data = cartData(request)
 
-    context = {'products': products, 'items_count': items_count}
+    context = {'products': products, 'items_count': data['items_count']}
     return render(request, 'store/store.html', context)
 
 def cart(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        items_count = order.items_count
-    else:
-        items = []
-        order = {'items_count': 0, 'get_total': 0}
-        items_count = 0
-
-        try:
-            cart = json.loads(request.COOKIES['cart'])
-        except:
-            cart = {}
-
-        for id in cart:
-            quantity = cart[id]['quantity']
-            order['items_count'] += quantity
-            items_count += quantity
-
-            product = Product.objects.get(id=id)
-            order['get_total'] += (product.price * quantity)
-
-            item = {
-                'product': product,
-                'quantity': quantity,
-                'get_total': product.price * quantity
-            }
-
-            items.append(item)
+    data = cartData(request)
         
-    context = {'items': items, 'order': order, 'items_count': items_count}
+    context = {'items': data['items'], 'order': data['order'], 'items_count': data['items_count']}
     return render(request, 'store/cart.html', context)
 
 def checkout(request):
+    data = cartData(request)
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        items_count = order.items_count
-        # shipping = order.shipping
-    else:
-        items = []
-        order = {'items_count': 0, 'get_total': 0}
-        items_count = 0
-        # shipping = False
+    items = data['items']
+    order = data['order']
 
-    context = {'items': items, 'order': order, 'items_count': items_count,}  
+    context = {'items': items, 'order': order, 'items_count': data['items_count']}
     return render(request, 'store/checkout.html', context)
 
 def update_item(request):
@@ -104,23 +63,62 @@ def create_order(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        order.transition = transition
-
-        if order.shipping:
-            shipping = ShippingAddress.objects.create(
-                customer= customer,
-                order= order,
-                address= data['shipping_data']['address'],
-                city= data['shipping_data']['city'],
-                state= data['shipping_data']['state'],
-                zipcode= data['shipping_data']['zipcode'],
-
-            )
-
-            shipping.save()
         
-        if order.get_total == total:
+    else:
+        customer, order = guestOrder(request, data)
+
+    if order.get_total == total:
             order.complete = True
-        order.save()
+
+    if order.shipping:
+        shipping = ShippingAddress.objects.create(
+            customer= customer,
+            order= order,
+            address= data['shipping_data']['address'],
+            city= data['shipping_data']['city'],
+            state= data['shipping_data']['state'],
+            zipcode= data['shipping_data']['zipcode'],
+
+        )
+    order.transition = transition
+    order.save()
 
     return JsonResponse('Ordered successfully', safe=False)
+
+
+def order_history(request):
+
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(customer=request.user.customer)
+    else:
+        orders = []
+
+    data = cartData(request)
+
+    context = {'orders': orders, 'items_count': data['items_count']}
+    return render(request, 'store/order_history.html', context)
+
+def order_detail(request, pk):
+
+    order = Order.objects.get(id=pk)
+    items = order.orderitem_set.all()
+    json_items = []
+
+    for item in items:
+        order_item = {
+            'name': item.product.name,
+            'quantity': item.quantity,
+            'price': item.product.price
+        }
+        json_items.append(order_item)
+
+    return JsonResponse({'items': json_items}, safe=False)
+
+
+def product_detail(request, pk):
+
+    product = Product.objects.get(id=pk)
+    data = cartData(request)
+
+    context = {'product': product, 'items_count': data['items_count']}
+    return render(request, 'store/product_detail.html', context)
