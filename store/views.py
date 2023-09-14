@@ -32,7 +32,6 @@ def checkout(request):
 def update_item(request):
 
     data = json.loads(request.body)
-
     product_id = data.get('product')
     action = data.get('action')
 
@@ -94,9 +93,9 @@ def order_history(request):
         orders = []
 
     data = cartData(request)
-
     context = {'orders': orders, 'items_count': data['items_count']}
     return render(request, 'store/order_history.html', context)
+
 
 def order_detail(request, pk):
 
