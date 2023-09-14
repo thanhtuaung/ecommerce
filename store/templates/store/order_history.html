@@ -4,7 +4,7 @@
 
 <br>
 <div class="row">
-    <div class="col-md-7">
+    <div class="col-xl-7">
         <div class="box-element">
             <table class="table">
                 <tr>
@@ -18,14 +18,14 @@
                         <td>{{order.date_ordered}}</td>
                         <td>{{order.transition}}</td>
                         <td>{{order.items_count}}</td>
-                        <td style="text-align: right;">{{order.get_total}}</td>
+                        <td style="text-align: right;">${{order.get_total}}</td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
         <br>
     </div>
-    <div class="col-md-5">
+    <div class="col-xl-5">
         <div class="box-element">
             <span style="font-weight: bold;">Transition ID :      <span id="transition-id" >.....</span></span><br>
             <span >Date Ordered :     <span id="date-ordered">.....</span></span><br><br>

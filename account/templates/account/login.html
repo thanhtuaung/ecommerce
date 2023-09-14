@@ -1,0 +1,24 @@
+{% extends 'account/main.html' %}
+
+{% block content %}
+
+<div class="box-element">
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <label for="email">Email:</label><br>
+        <input type="email" name="email"><br><br>
+
+        <label for="password">Password:</label><br>
+        <input type="password" name="password">
+
+        <br><br>
+        <input type="submit" value="Login" class="btn btn-outline-dark">
+
+    </form>
+
+    </div>
+
+{% endblock %}
