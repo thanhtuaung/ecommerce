@@ -4,6 +4,8 @@ from django.http import HttpRequest
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from .forms import RegisterForm
+from store.models import Customer
+from django.contrib import messages
 
 def login_view(request : HttpRequest):
     # if request.user.is_authenticated:
@@ -18,12 +20,16 @@ def login_view(request : HttpRequest):
         if user is not None:
             login(request, user)
             return redirect('store')
+        else:
+            messages.error(request, message='Invalide emaill or password')
+            return redirect('login')
 
     return render(request, 'account/login.html')
 
 def logout_view(request: HttpRequest):
     logout(request)
     return redirect('login')
+
 
 def register_view(request):
 
@@ -36,8 +42,15 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
 
+            if user is not None:
+                Customer.objects.create(
+                    user=user,
+                    name=user.username,
+                    email=user.email
+                )
 
-            return redirect('login')
+                login(request, user)
+                return redirect('store')
         
     context = {'form': form}
     return render(request, 'account/register.html', context)

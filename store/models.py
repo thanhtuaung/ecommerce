@@ -1,3 +1,5 @@
+from .file_name_generator import generate_filename
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -13,7 +15,7 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=7, decimal_places=2)
     digital = models.BooleanField(default=False, null=True)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(upload_to=generate_filename, null=True, blank=True)
 
     def __str__(self) -> str:
         return self.name
@@ -25,6 +27,8 @@ class Product(models.Model):
         except:
             url = ''
         return url
+    
+    
     
 class Order(models.Model):
     customer = models.ForeignKey(Customer, blank=True, null=True, on_delete=models.SET_NULL)
@@ -80,3 +84,4 @@ class ShippingAddress(models.Model):
 
     def __str__(self) -> str:
         return self.address
+    

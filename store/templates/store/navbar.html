@@ -1,21 +1,68 @@
 {% load static %}
 
+<style>
+    .user-profile {
+    width: 50px;
+    height: 50px;
+    color: green;
+    background-color: black;
+    margin-left: 10px;
+  }
+
+  .profile-header {
+    margin: 10px 20px 0 20px;
+  }
+
+</style>
+
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="{% url 'store' %}">Ecom</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="{% url 'store' %}">Store <span class="sr-only">(current)</span></a>
-        </li>
-      </ul>
-      <div class="form-inline my-2 my-lg-0">
-        <a href="{% url 'login' %}" class="btn btn-warning my-2 my-sm-0" type="submit">Login</a>
-        <a href="{% url 'cart' %}" ><img id="cart-icon" src="{% static 'images/cart_icon.png' %}" alt="shopping cart"></a>
-        <p id="cart-total">{{items_count}}</p>
+  <a class="navbar-brand" href="{% url 'store' %}">Ecom</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'store' %}">Store <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+    <div class="form-inline my-2 my-lg-0">
+      <a href="{% url 'cart' %}"><img id="cart-icon" src="{% static 'images/cart_icon.png' %}" alt="shopping cart"></a>
+      <p id="cart-total">{{items_count}}</p>
+
+
+
+
+      <div class="dropdown">
+        <div class="btn user-profile rounded-circle" data-toggle="dropdown" aria-expanded="false">
+        </div>
+        <div class="dropdown-menu dropdown-menu-lg-right">
+
+          
+
+          {% if request.user.is_authenticated %}
+          <div class="profile-header">
+            <h5>{{request.user.customer.name}}</h5>
+            <span>{{request.user.customer.email}}</span>
+          </div>
+          <hr>
+          
+          <a class="dropdown-item" href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+          {% else %}
+          <div class="profile-header">
+            <h5>Unknown</h5>
+          </div>
+          <hr>
+
+          <a class="dropdown-item" href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+          <a class="dropdown-item" href="{% url 'register' %}"><i class="fa-solid fa-user-plus"></i> Register</a>
+          {% endif %}
+        </div>
       </div>
+
     </div>
-  </nav>
+  </div>
+</nav>

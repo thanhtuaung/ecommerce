@@ -2,7 +2,6 @@
 
 {% block content %}
 
-<!-- Pills navs -->
 <br><br>
 <div style="height: 100%; position: relative;">
     <div style="width: 400px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, 0);">
@@ -14,6 +13,12 @@
 
                 <div class="form-group">
                     <h2 style="text-align: center;">Login</h2><br>
+
+                    {% for message in messages %}
+                        <a href="#">{{message}}</a>
+                    {% endfor %}
+                    <br>
+
                     <label for="exampleInputEmail1">Email address</label>
                     <input type="email" name="email" class="form-control" id="exampleInputEmail1"
                         aria-describedby="emailHelp" placeholder="Enter email">
