@@ -6,6 +6,7 @@ from .utils import cartData, guestOrder
 import json
 import datetime
 
+
 def store(request):
     products = Product.objects.all()
 
