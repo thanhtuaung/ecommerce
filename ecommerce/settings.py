@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'store.apps.StoreConfig',
     'account',
+    'dashboard'
 ]
 
 MIDDLEWARE = [
